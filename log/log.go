@@ -3,7 +3,7 @@
  * @Email: thepoy@163.com
  * @File Name: log.go
  * @Created: 2021-05-16 09:39:17
- * @Modified: 2021-05-16 10:51:53
+ * @Modified: 2021-05-16 19:35:36
  */
 
 package log
@@ -46,14 +46,13 @@ type FdWriter interface {
 	Fd() uintptr
 }
 
-// NewLogger 返回一个输出到指定位置的自动染色的日志实例
+// NewLogger 返回一个输出到终端的自动染色的日志实例
 func NewLogger() *Logger {
 	logger := &Logger{
 		color:     terminal.IsTerminal(int(os.Stdout.Fd())),
 		out:       os.Stdout,
 		timestamp: true,
 	}
-	log.RegisterLogger(logger)
 	return logger
 }
 
