@@ -3,7 +3,7 @@
  * @Email: thepoy@163.com
  * @File Name: default.go
  * @Created: 2021-05-16 09:39:17
- * @Modified: 2021-05-16 19:38:48
+ * @Modified: 2021-05-16 19:52:33
  */
 
 package log
@@ -12,6 +12,7 @@ var defaultLogger *Logger
 
 func init() {
 	defaultLogger = NewLogger()
+    defaultLogger.depth = 2
 }
 
 // Trace 默认 Trace 方法

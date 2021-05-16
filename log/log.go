@@ -3,7 +3,7 @@
  * @Email: thepoy@163.com
  * @File Name: log.go
  * @Created: 2021-05-16 09:39:17
- * @Modified: 2021-05-16 19:35:36
+ * @Modified: 2021-05-16 19:52:52
  */
 
 package log
@@ -31,7 +31,9 @@ type Logger struct {
 	timestamp bool
 	quiet     bool
 	buf       color.ColorBuffer
-	logLevel  log.LogLevel
+	// runtime.Caller() 的深度
+	depth    int
+	logLevel log.LogLevel
 }
 
 // Prefix 日志信息的前缀和颜色
@@ -52,6 +54,7 @@ func NewLogger() *Logger {
 		color:     terminal.IsTerminal(int(os.Stdout.Fd())),
 		out:       os.Stdout,
 		timestamp: true,
+		depth:     1,
 	}
 	return logger
 }
@@ -298,7 +301,7 @@ func (l *Logger) Output(depth int, prefix Prefix, data string) error {
 // Fatal 打印 fatal 日志，并以状态码 1 退出当前程序
 func (l *Logger) Fatal(v ...interface{}) {
 	if l.logLevel <= log.FatalLevel {
-		l.Output(1, FatalPrefix, fmt.Sprintln(v...))
+		l.Output(l.depth, FatalPrefix, fmt.Sprintln(v...))
 	}
 	os.Exit(1)
 }
@@ -306,7 +309,7 @@ func (l *Logger) Fatal(v ...interface{}) {
 // Fatalf 根据指定的格式打印 fatal 日志，并以状态码 1 退出当前程序
 func (l *Logger) Fatalf(format string, v ...interface{}) {
 	if l.logLevel <= log.FatalLevel {
-		l.Output(1, FatalPrefix, fmt.Sprintf(format, v...))
+		l.Output(l.depth, FatalPrefix, fmt.Sprintf(format, v...))
 	}
 	os.Exit(1)
 }
@@ -314,69 +317,69 @@ func (l *Logger) Fatalf(format string, v ...interface{}) {
 // Error 打印 error 日志
 func (l *Logger) Error(v ...interface{}) {
 	if l.logLevel <= log.ErrorLevel {
-		l.Output(1, ErrorPrefix, fmt.Sprintln(v...))
+		l.Output(l.depth, ErrorPrefix, fmt.Sprintln(v...))
 	}
 }
 
 // Errorf 根据指定格式打印 error 日志
 func (l *Logger) Errorf(format string, v ...interface{}) {
 	if l.logLevel <= log.ErrorLevel {
-		l.Output(1, ErrorPrefix, fmt.Sprintf(format, v...))
+		l.Output(l.depth, ErrorPrefix, fmt.Sprintf(format, v...))
 	}
 }
 
 // Warn 打印 warning 日志
 func (l *Logger) Warn(v ...interface{}) {
 	if l.logLevel <= log.WarnLevel {
-		l.Output(1, WarnPrefix, fmt.Sprintln(v...))
+		l.Output(l.depth, WarnPrefix, fmt.Sprintln(v...))
 	}
 }
 
 // Warnf 根据指定格式打印 warning 日志
 func (l *Logger) Warnf(format string, v ...interface{}) {
 	if l.logLevel <= log.WarnLevel {
-		l.Output(1, WarnPrefix, fmt.Sprintf(format, v...))
+		l.Output(l.depth, WarnPrefix, fmt.Sprintf(format, v...))
 	}
 }
 
 // Info 打印 info 日志
 func (l *Logger) Info(v ...interface{}) {
 	if l.logLevel <= log.InfoLevel {
-		l.Output(1, InfoPrefix, fmt.Sprintln(v...))
+		l.Output(l.depth, InfoPrefix, fmt.Sprintln(v...))
 	}
 }
 
 // Infof 根据指定格式打印 info 日志
 func (l *Logger) Infof(format string, v ...interface{}) {
 	if l.logLevel <= log.InfoLevel {
-		l.Output(1, InfoPrefix, fmt.Sprintf(format, v...))
+		l.Output(l.depth, InfoPrefix, fmt.Sprintf(format, v...))
 	}
 }
 
 // Debug 打印 debug 日志
 func (l *Logger) Debug(v ...interface{}) {
 	if l.logLevel == log.AllLevel {
-		l.Output(1, DebugPrefix, fmt.Sprintln(v...))
+		l.Output(l.depth, DebugPrefix, fmt.Sprintln(v...))
 	}
 }
 
 // Debugf 根据指定格式打印 debug 日志
 func (l *Logger) Debugf(format string, v ...interface{}) {
 	if l.logLevel == log.AllLevel {
-		l.Output(1, DebugPrefix, fmt.Sprintf(format, v...))
+		l.Output(l.depth, DebugPrefix, fmt.Sprintf(format, v...))
 	}
 }
 
 // Trace 如果开启调式模式则打印 trace 日志
 func (l *Logger) Trace(v ...interface{}) {
 	if l.logLevel == log.AllLevel {
-		l.Output(1, TracePrefix, fmt.Sprintln(v...))
+		l.Output(l.depth, TracePrefix, fmt.Sprintln(v...))
 	}
 }
 
 // Tracef 如果开启调式模式则根据指定格式打印 trace 日志
 func (l *Logger) Tracef(format string, v ...interface{}) {
 	if l.logLevel == log.AllLevel {
-		l.Output(1, TracePrefix, fmt.Sprintf(format, v...))
+		l.Output(l.depth, TracePrefix, fmt.Sprintf(format, v...))
 	}
 }
