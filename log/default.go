@@ -3,7 +3,7 @@
  * @Email: thepoy@163.com
  * @File Name: default.go
  * @Created: 2021-05-16 09:39:17
- * @Modified: 2021-05-16 19:52:33
+ * @Modified: 2021-05-16 19:54:27
  */
 
 package log
@@ -30,9 +30,19 @@ func Info(v ...interface{}) {
 	defaultLogger.Info(v...)
 }
 
-// Infof 默认 Tracef 方法
+// Infof 默认 Infof 方法
 func Infof(format string, v ...interface{}) {
 	defaultLogger.Infof(format, v...)
+}
+
+// Debug 默认 Debug 方法
+func Debug(v ...interface{}) {
+    defaultLogger.Debug(v...)
+}
+
+// Debugf 默认 Debugf 方法
+func Debugf(format string, v ...interface{}) {
+    defaultLogger.Debugf(format, v...)
 }
 
 // Warn 默认 Warn 方法
